@@ -21,7 +21,7 @@ import java.util.Optional;
 //@Service // 1. Spring-managed service component
 public class Service {
 
-    private final TokenService tokenService;
+    public final TokenService tokenService;
     private final AdminRepository adminRepository;
     private final DoctorRepository doctorRepository;
     private final PatientRepository patientRepository;

@@ -115,7 +115,7 @@ public class DoctorService {
         if (doctor == null || !doctor.getPassword().equals(password)) {
             return "Invalid email or password";
         }
-        return tokenService.generateToken(doctor.getId(), "doctor");
+        return tokenService.generateToken(String.valueOf(doctor.getId()));
     }
 
     // 10. Find doctors by name
