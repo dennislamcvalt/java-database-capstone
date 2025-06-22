@@ -1,41 +1,48 @@
 package com.project.back_end.models;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
-
 @Entity
+@Table(name = "patients")
 public class Patient {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @NotNull(message = "Name cannot be null")
+    @NotNull(message = "Patient name is required")
     @Size(min = 3, max = 100, message = "Name must be between 3 and 100 characters")
+    @Column(nullable = false)
     private String name;
 
-    @NotNull(message = "Email cannot be null")
-    @Email(message = "Email must be valid")
+    @NotNull(message = "Email is required")
+    @Email(message = "Email should be valid")
+    @Column(nullable = false, unique = true)
     private String email;
 
-    @NotNull(message = "Password cannot be null")
+    @NotNull(message = "Password is required")
     @Size(min = 6, message = "Password must be at least 6 characters")
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
+    @Column(nullable = false)
     private String password;
 
-    @NotNull(message = "Phone cannot be null")
-    @Pattern(regexp = "\\d{10}", message = "Phone number must be 10 digits")
+    @NotNull(message = "Phone number is required")
+    @Pattern(regexp = "^[0-9]{10}$", message = "Phone number must be exactly 10 digits")
+    @Column(nullable = false, unique = true)
     private String phone;
 
-    @NotNull(message = "Address cannot be null")
-    @Size(max = 255, message = "Address must be less than or equal to 255 characters")
+    @NotNull(message = "Address is required")
+    @Size(max = 255, message = "Address must be at most 255 characters")
+    @Column(nullable = false)
     private String address;
 
-    // Constructors
-    public Patient() {}
+    // Default constructor required by JPA
+    public Patient() {
+    }
 
+    // Parameterized constructor
     public Patient(String name, String email, String password, String phone, String address) {
         this.name = name;
         this.email = email;
@@ -70,7 +77,6 @@ public class Patient {
         this.email = email;
     }
 
-    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     public String getPassword() {
         return password;
     }

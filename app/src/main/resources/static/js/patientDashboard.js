@@ -1,7 +1,9 @@
-import { createDoctorCard } from './components/doctorCard.js';
+// patientDashboard.js
+import { getDoctors } from './services/doctorServices.js';
 import { openModal } from './components/modals.js';
-import { filterDoctors, getDoctors } from './services/doctorServices.js';
-import { patientLogin, patientSignup } from './services/patientServices.js';
+import { createDoctorCard } from './components/doctorCard.js';
+import { filterDoctors } from './services/doctorServices.js';//call the same function to avoid duplication coz the functionality was same
+import { patientSignup, patientLogin } from './services/patientServices.js';
 
 
 
@@ -16,10 +18,10 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 });
 
-document.addEventListener("DOMContentLoaded", ()=> {
+document.addEventListener("DOMContentLoaded", () => {
   const loginBtn = document.getElementById("patientLogin")
-  if(loginBtn){
-    loginBtn.addEventListener("click" , ()=> {
+  if (loginBtn) {
+    loginBtn.addEventListener("click", () => {
       openModal("patientLogin")
     })
   }
@@ -29,7 +31,7 @@ function loadDoctorCards() {
   getDoctors()
     .then(doctors => {
       const contentDiv = document.getElementById("content");
-      contentDiv.innerHTML = ""; 
+      contentDiv.innerHTML = "";
 
       doctors.forEach(doctor => {
         const card = createDoctorCard(doctor);
@@ -48,20 +50,20 @@ document.getElementById("filterSpecialty").addEventListener("change", filterDoct
 
 
 function filterDoctorsOnChange() {
-  const searchBar = document.getElementById("searchBar").value.trim(); 
-  const filterTime = document.getElementById("filterTime").value;  
-  const filterSpecialty = document.getElementById("filterSpecialty").value;  
+  const searchBar = document.getElementById("searchBar").value.trim();
+  const filterTime = document.getElementById("filterTime").value;
+  const filterSpecialty = document.getElementById("filterSpecialty").value;
 
-  
-  const name = searchBar.length > 0 ? searchBar : null;  
+
+  const name = searchBar.length > 0 ? searchBar : null;
   const time = filterTime.length > 0 ? filterTime : null;
   const specialty = filterSpecialty.length > 0 ? filterSpecialty : null;
 
-  filterDoctors(name , time ,specialty)
+  filterDoctors(name, time, specialty)
     .then(response => {
       const doctors = response.doctors;
       const contentDiv = document.getElementById("content");
-      contentDiv.innerHTML = ""; 
+      contentDiv.innerHTML = "";
 
       if (doctors.length > 0) {
         console.log(doctors);
@@ -80,17 +82,6 @@ function filterDoctorsOnChange() {
     });
 }
 
-export function renderDoctorCards(doctors) {
-  const contentDiv = document.getElementById("content");
-      contentDiv.innerHTML = ""; 
-
-      doctors.forEach(doctor => {
-        const card = createDoctorCard(doctor);
-        contentDiv.appendChild(card);
-      });
-   
-}
-
 window.signupPatient = async function () {
   try {
     const name = document.getElementById("name").value;
@@ -101,7 +92,7 @@ window.signupPatient = async function () {
 
     const data = { name, email, password, phone, address };
     const { success, message } = await patientSignup(data);
-    if(success){
+    if (success) {
       alert(message);
       document.getElementById("modal").style.display = "none";
       window.location.reload();
@@ -113,11 +104,11 @@ window.signupPatient = async function () {
   }
 };
 
-window.loginPatient = async function(){
+window.loginPatient = async function () {
   try {
     const email = document.getElementById("email").value;
     const password = document.getElementById("password").value;
-  
+
     const data = {
       email,
       password
@@ -130,15 +121,15 @@ window.loginPatient = async function(){
       const result = await response.json();
       console.log(result);
       selectRole('loggedPatient');
-      localStorage.setItem('token', result.token )
+      localStorage.setItem('token', result.token)
       window.location.href = '/pages/loggedPatientDashboard.html';
     } else {
       alert('❌ Invalid credentials!');
-    } 
+    }
   }
-  catch(error) {
-    alert("❌ Failed to Login : ",error);
-    console.log("Error :: loginPatient :: " ,error)
+  catch (error) {
+    alert("❌ Failed to Login : ", error);
+    console.log("Error :: loginPatient :: ", error)
   }
 
 

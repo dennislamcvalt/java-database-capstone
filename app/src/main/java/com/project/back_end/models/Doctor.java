@@ -1,46 +1,55 @@
 package com.project.back_end.models;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
-
-import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.util.List;
 
 @Entity
+@Table(name = "doctors")
 public class Doctor {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @NotNull(message = "Doctor name cannot be null")
+    @NotNull(message = "Doctor name is required")
     @Size(min = 3, max = 100, message = "Name must be between 3 and 100 characters")
+    @Column(nullable = false)
     private String name;
 
-    @NotNull(message = "Specialty cannot be null")
+    @NotNull(message = "Specialty is required")
     @Size(min = 3, max = 50, message = "Specialty must be between 3 and 50 characters")
+    @Column(nullable = false)
     private String specialty;
 
-    @NotNull(message = "Email cannot be null")
+    @NotNull(message = "Email is required")
     @Email(message = "Email should be valid")
+    @Column(nullable = false, unique = true)
     private String email;
 
-    @NotNull(message = "Password cannot be null")
+    @NotNull(message = "Password is required")
     @Size(min = 6, message = "Password must be at least 6 characters long")
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
+    @Column(nullable = false)
     private String password;
 
-    @NotNull(message = "Phone number cannot be null")
-    @Pattern(regexp = "\\d{10}", message = "Phone number must be 10 digits")
+    @NotNull(message = "Phone number is required")
+    @Pattern(regexp = "^[0-9]{10}$", message = "Phone number must be exactly 10 digits")
+    @Column(nullable = false, unique = true)
     private String phone;
 
     @ElementCollection
+    @CollectionTable(name = "doctor_available_times", joinColumns = @JoinColumn(name = "doctor_id"))
+    @Column(name = "time_slot")
     private List<String> availableTimes;
 
-    // Constructors
-    public Doctor() {}
+    // Default constructor required by JPA
+    public Doctor() {
+    }
 
+    // Parameterized constructor for convenience
     public Doctor(String name, String specialty, String email, String password, String phone, List<String> availableTimes) {
         this.name = name;
         this.specialty = specialty;
@@ -84,7 +93,6 @@ public class Doctor {
         this.email = email;
     }
 
-    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     public String getPassword() {
         return password;
     }
@@ -109,4 +117,5 @@ public class Doctor {
         this.availableTimes = availableTimes;
     }
 }
+
 
