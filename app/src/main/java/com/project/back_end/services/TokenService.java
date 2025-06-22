@@ -1,9 +1,19 @@
 package com.project.back_end.services;
 
 public class TokenService {
+
+    public String generateToken(Long id, String string) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'generateToken'");
+    }
 // 1. **@Component Annotation**
 // The @Component annotation marks this class as a Spring component, meaning Spring will manage it as a bean within its application context.
 // This allows the class to be injected into other Spring-managed components (like services or controllers) where it's needed.
+
+    public String extractEmailFromToken(String token) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'extractEmailFromToken'");
+    }
 
 // 2. **Constructor Injection for Dependencies**
 // The constructor injects dependencies for `AdminRepository`, `DoctorRepository`, and `PatientRepository`,
